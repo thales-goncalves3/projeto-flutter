@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Login(),
         '/basic_form': (context) => const BasicForm(),
-        '/show_users': (context) => const ShowUsers(),
+        '/show_users': (context) => ShowUsers(),
       },
       theme: ThemeData(
         primarySwatch: Colors.purple,

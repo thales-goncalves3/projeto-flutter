@@ -20,20 +20,21 @@ class _LoginState extends State<Login> {
   final db = Hive.box("database");
 
   bool checkUser() {
-    List<UserModel> usersModels = <UserModel>[];
-    List<dynamic> listUsers = db.values.toList();
+    List<UserModel>? usersModels = <UserModel>[];
+    List<dynamic>? listUsers = db.values.toList();
 
     listUsers.forEach((element) {
-      usersModels.add(UserModel.fromMap(element));
+      usersModels.add(UserModel.fromMap(Map.from(element)));
     });
 
-    for (var i = 0; i < listUsers.length; i++) {
-      if (usersModels[i].name == username.text &&
-          usersModels[i].password == password.text) {
-        return true;
+    if (!usersModels.isEmpty) {
+      for (var i = 0; i < listUsers.length; i++) {
+        if (usersModels[i].name == username.text &&
+            usersModels[i].password == password.text) {
+          return true;
+        }
       }
     }
-
     return false;
   }
 

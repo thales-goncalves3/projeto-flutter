@@ -28,6 +28,8 @@ class _BasicFormState extends State<BasicForm> {
     user = user.copyWith(id: id);
 
     db.add(user.toMap());
+
+    print(db.values);
   }
 
   @override
