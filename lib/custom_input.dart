@@ -6,6 +6,7 @@ class CustomInput extends StatelessWidget {
   final String? hintText;
   final IconData? icon;
   final Widget? suffix;
+  final TextEditingController? controller;
   bool obscureText;
   final String? Function(String? text)? validator;
   final void Function(String? text)? onSaved;
@@ -21,11 +22,13 @@ class CustomInput extends StatelessWidget {
     this.onChanged,
     this.obscureText = false,
     this.suffix,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       onSaved: onSaved,

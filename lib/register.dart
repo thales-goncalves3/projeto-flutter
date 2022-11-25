@@ -1,6 +1,9 @@
 import 'package:basic_form/model/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:string_validator/string_validator.dart' as validator;
+import 'package:provider/provider.dart';
+import './providers/id_provider.dart';
 
 import 'custom_input.dart';
 
@@ -18,18 +21,29 @@ class _BasicFormState extends State<BasicForm> {
   bool obscureTextPassword = true;
   bool obscureTextConfirmPassword = true;
   var user = UserModel();
+  final db = Hive.box("database");
+  late Id id;
+
+  void createUser(id) {
+    user = user.copyWith(id: id);
+
+    db.add(user.toMap());
+  }
 
   @override
   Widget build(BuildContext context) {
+    id = Provider.of<Id>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Basic Form"),
+        title: const Text("Sing up"),
       ),
       body: Form(
           key: formKey,
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               CustomInput(
                   label: "Username",
                   hintText: "Type your username",
@@ -134,70 +148,28 @@ class _BasicFormState extends State<BasicForm> {
                     child: SizedBox(
                       width: 150,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
+                            createUser(id.id);
+                            id.increment();
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      title: const Text("Created User"),
-                                      content: SizedBox(
-                                        height: 100,
-                                        child: FittedBox(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Nome: ",
-                                                    style: TextStyle(
-                                                        color: Colors.blue,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 30),
-                                                  ),
-                                                  Text(
-                                                    user.name ?? "",
-                                                    style: const TextStyle(
-                                                        fontSize: 30),
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Email: ",
-                                                    style: TextStyle(
-                                                        color: Colors.blue,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 30),
-                                                  ),
-                                                  Text(user.email ?? "",
-                                                      style: const TextStyle(
-                                                          fontSize: 30))
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      title: const Text(
+                                          "User created successfully"),
+                                      content: const Text("Back to sign in"),
                                       actions: [
                                         TextButton(
                                             onPressed: () =>
-                                                Navigator.pop(context, "Ok"),
+                                                Navigator.pushNamed(
+                                                    context, "/"),
                                             child: const Text("OK"))
                                       ],
                                     ));
-                            formKey.currentState?.reset();
                           }
                         },
-                        child: const Text("Save"),
+                        child: const Text("Sing up"),
                       ),
                     ),
                   ),
