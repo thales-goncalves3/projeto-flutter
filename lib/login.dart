@@ -1,10 +1,7 @@
-import 'dart:convert';
-
+import 'package:basic_form/controllers/database.dart';
 import 'package:basic_form/custom_input.dart';
 import 'package:basic_form/model/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,25 +14,32 @@ class _LoginState extends State<Login> {
   bool obscureTextPassword = true;
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  final db = Hive.box("database");
+  var database = Database();
 
   bool checkUser() {
-    List<UserModel>? usersModels = <UserModel>[];
-    List<dynamic>? listUsers = db.values.toList();
+    List<UserModel> users = database.getAllUsers();
 
-    listUsers.forEach((element) {
-      usersModels.add(UserModel.fromMap(Map.from(element)));
-    });
+    if (users.isNotEmpty) {
+      if (containsUser(username.text, users)) {
+        return checkPassword(database.getUser(username.text), password.text);
+      }
+    }
 
-    if (!usersModels.isEmpty) {
-      for (var i = 0; i < listUsers.length; i++) {
-        if (usersModels[i].name == username.text &&
-            usersModels[i].password == password.text) {
-          return true;
-        }
+    users.clear();
+    return false;
+  }
+
+  containsUser(String username, List<UserModel> users) {
+    for (var user in users) {
+      if (username == user.name) {
+        return true;
       }
     }
     return false;
+  }
+
+  checkPassword(UserModel? user, String password) {
+    return user?.password == password ? true : false;
   }
 
   @override
@@ -91,9 +95,10 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                               onPressed: () async {
-                                if (checkUser())
+                                if (checkUser()) {
                                   Navigator.of(context)
                                       .pushNamed('/show_users');
+                                } else {}
                               },
                               child: const Text("Sign in")),
                         )),

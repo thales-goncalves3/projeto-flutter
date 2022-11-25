@@ -1,3 +1,4 @@
+import 'package:basic_form/controllers/database.dart';
 import 'package:basic_form/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,15 +22,12 @@ class _BasicFormState extends State<BasicForm> {
   bool obscureTextPassword = true;
   bool obscureTextConfirmPassword = true;
   var user = UserModel();
-  final db = Hive.box("database");
+  final database = Database();
   late Id id;
 
-  void createUser(id) {
+  Future<int> createUser(id) {
     user = user.copyWith(id: id);
-
-    db.add(user.toMap());
-
-    print(db.values);
+    return database.addUser(user.toMap());
   }
 
   @override
