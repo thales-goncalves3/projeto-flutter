@@ -13,6 +13,14 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Users"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.exit_to_app))
+        ],
       ),
       body: ListView.builder(
         itemCount: users.length,
@@ -27,7 +35,7 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("ID: ${users[index].id}"),
-                  Text("Nome: ${users[index].name}"),
+                  Text("Nome: ${users[index].username}"),
                   Text("Email: ${users[index].email}"),
                 ],
               ),

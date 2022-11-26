@@ -1,8 +1,6 @@
-import 'package:basic_form/controllers/database.dart';
 import 'package:basic_form/src/core/models/user_model.dart';
 import 'package:basic_form/src/modules/registration/registration_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:string_validator/string_validator.dart' as validator;
 import 'package:provider/provider.dart';
 import '../../../providers/id_provider.dart';
@@ -32,7 +30,8 @@ class _BasicFormState extends State<BasicForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sing up"),
+        title: const Text("Sign up"),
+        centerTitle: true,
       ),
       body: Form(
           key: formKey,
@@ -44,14 +43,19 @@ class _BasicFormState extends State<BasicForm> {
                   label: "Username",
                   hintText: "Type your username",
                   icon: Icons.person,
-                  onSaved: (text) => user = user.copyWith(name: text),
+                  onSaved: (text) =>
+                      user = user.copyWith(username: text?.replaceAll(" ", "")),
                   validator: (text) {
                     if (text == null || text.isEmpty) {
                       return "This field is required";
                     }
 
-                    if (text.length <= 6) {
-                      return "The username must have more than six digits";
+                    if (text.length <= 4) {
+                      return "The username must have more than 4 digits";
+                    }
+
+                    if (controller.verifyUser(text)) {
+                      return "The username is already registered";
                     }
 
                     return null;
@@ -63,7 +67,8 @@ class _BasicFormState extends State<BasicForm> {
                 label: "Email",
                 hintText: "Type your email",
                 icon: Icons.mail,
-                onSaved: (text) => user = user.copyWith(email: text),
+                onSaved: (text) =>
+                    user = user.copyWith(email: text?.replaceAll(" ", "")),
                 validator: (text) {
                   if (text == null || text.isEmpty) {
                     return "This field is required";
@@ -71,6 +76,10 @@ class _BasicFormState extends State<BasicForm> {
 
                   if (!validator.isEmail(text)) {
                     return "This field must be email type";
+                  }
+
+                  if (controller.verifyEmail(text)) {
+                    return "The email is already registered";
                   }
 
                   return null;
@@ -95,9 +104,17 @@ class _BasicFormState extends State<BasicForm> {
                       ? Icons.visibility_off
                       : Icons.visibility),
                 ),
-                validator: (text) => text == null || text.isEmpty
-                    ? "This field is required"
-                    : null,
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return "This field is required";
+                  }
+
+                  if (text.length < 8) {
+                    return "The password must have 8 or more digits";
+                  }
+
+                  return null;
+                },
                 onChanged: (text) => password = text,
               ),
               const SizedBox(
@@ -147,25 +164,27 @@ class _BasicFormState extends State<BasicForm> {
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
-                            controller.createUser(user, id.id);
-                            id.increment();
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                      title: const Text(
-                                          "User created successfully"),
-                                      content: const Text("Back to sign in"),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.pushNamed(
-                                                    context, "/"),
-                                            child: const Text("OK"))
-                                      ],
-                                    ));
+                            if (await controller.createUser(user, id.id)) {
+                              id.increment();
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title: const Text(
+                                            "User created successfully"),
+                                        content: const Text("Back to sign in"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pushNamed(
+                                                      context, "/"),
+                                              child: const Text("OK"))
+                                        ],
+                                      ));
+                            }
                           }
                         },
-                        child: const Text("Sing up"),
+                        child: const Text("Sign up"),
                       ),
                     ),
                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../controllers/database.dart';
+import '../database/database.dart';
 import '../../core/models/user_model.dart';
 
 class LoginController {
@@ -16,12 +16,12 @@ class LoginController {
         return 2;
       }
     }
-    return 0;
+    return 2;
   }
 
   containsUser(String username, List<UserModel> users) {
     for (var user in users) {
-      if (username == user.name) {
+      if (username == user.username) {
         return true;
       }
     }

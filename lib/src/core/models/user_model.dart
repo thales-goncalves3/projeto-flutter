@@ -5,25 +5,25 @@ import 'package:hive/hive.dart';
 
 class UserModel extends HiveObject {
   int? id;
-  String? name;
+  String? username;
   String? email;
   String? password;
   UserModel({
     this.id,
-    this.name = '',
+    this.username = '',
     this.email = '',
     this.password = '',
   });
 
   UserModel copyWith({
     int? id,
-    String? name,
+    String? username,
     String? email,
     String? password,
   }) {
     return UserModel(
       id: id ?? this.id,
-      name: name ?? this.name,
+      username: username ?? this.username,
       email: email ?? this.email,
       password: password ?? this.password,
     );
@@ -32,7 +32,7 @@ class UserModel extends HiveObject {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'name': name,
+      'username': username,
       'email': email,
       'password': password,
     };
@@ -41,7 +41,7 @@ class UserModel extends HiveObject {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'] as int,
-      name: map['name'] != null ? map['name'] as String : null,
+      username: map['username'] != null ? map['username'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
     );
@@ -54,7 +54,7 @@ class UserModel extends HiveObject {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, password: $password)';
+    return 'UserModel(id: $id, name: $username, email: $email, password: $password)';
   }
 
   @override
@@ -62,13 +62,13 @@ class UserModel extends HiveObject {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.name == name &&
+        other.username == username &&
         other.email == email &&
         other.password == password;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ email.hashCode ^ password.hashCode;
+    return id.hashCode ^ username.hashCode ^ email.hashCode ^ password.hashCode;
   }
 }

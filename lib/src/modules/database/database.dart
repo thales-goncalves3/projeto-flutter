@@ -8,8 +8,6 @@ class Database {
   List<dynamic> listUsers = database.values.toList();
 
   List<UserModel> getAllUsers() {
-    usersModels.clear();
-
     for (var element in listUsers) {
       usersModels.add(UserModel.fromMap(element));
     }
@@ -21,7 +19,7 @@ class Database {
     List<UserModel> listUsers = getAllUsers();
 
     for (var user in listUsers) {
-      if (user.name == username) {
+      if (user.username == username) {
         return user;
       }
     }
