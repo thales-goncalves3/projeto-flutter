@@ -1,17 +1,15 @@
-import 'package:basic_form/controllers/database.dart';
+import 'package:basic_form/src/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
-import 'model/user_model.dart';
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-class ShowUsers extends StatelessWidget {
-  ShowUsers({super.key});
-
-  var db = Hive.box("database");
+  var controller = HomeController();
 
   @override
   Widget build(BuildContext context) {
-    List<UserModel> users = Database().getAllUsers();
+    var users = controller.getUsers();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Users"),

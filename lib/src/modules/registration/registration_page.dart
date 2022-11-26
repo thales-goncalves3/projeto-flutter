@@ -1,12 +1,13 @@
 import 'package:basic_form/controllers/database.dart';
-import 'package:basic_form/model/user_model.dart';
+import 'package:basic_form/src/core/models/user_model.dart';
+import 'package:basic_form/src/modules/registration/registration_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:string_validator/string_validator.dart' as validator;
 import 'package:provider/provider.dart';
-import './providers/id_provider.dart';
+import '../../../providers/id_provider.dart';
 
-import 'custom_input.dart';
+import '../../../custom_input.dart';
 
 class BasicForm extends StatefulWidget {
   const BasicForm({super.key});
@@ -22,13 +23,8 @@ class _BasicFormState extends State<BasicForm> {
   bool obscureTextPassword = true;
   bool obscureTextConfirmPassword = true;
   var user = UserModel();
-  final database = Database();
   late Id id;
-
-  Future<int> createUser(id) {
-    user = user.copyWith(id: id);
-    return database.addUser(user.toMap());
-  }
+  var controller = RegistrationController();
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +147,7 @@ class _BasicFormState extends State<BasicForm> {
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
-                            createUser(id.id);
+                            controller.createUser(user, id.id);
                             id.increment();
                             showDialog(
                                 context: context,

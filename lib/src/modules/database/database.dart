@@ -1,4 +1,4 @@
-import 'package:basic_form/model/user_model.dart';
+import 'package:basic_form/src/core/models/user_model.dart';
 import 'package:hive/hive.dart';
 
 var database = Hive.box("database");

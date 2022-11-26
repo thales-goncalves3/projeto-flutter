@@ -1,7 +1,10 @@
 import 'package:basic_form/controllers/database.dart';
 import 'package:basic_form/custom_input.dart';
-import 'package:basic_form/model/user_model.dart';
+import 'package:basic_form/dialog_error.dart';
+import 'package:basic_form/src/core/models/user_model.dart';
 import 'package:flutter/material.dart';
+
+import 'login_controller.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,34 +17,8 @@ class _LoginState extends State<Login> {
   bool obscureTextPassword = true;
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  var database = Database();
 
-  bool checkUser() {
-    List<UserModel> users = database.getAllUsers();
-
-    if (users.isNotEmpty) {
-      if (containsUser(username.text, users)) {
-        return checkPassword(database.getUser(username.text), password.text);
-      }
-    }
-
-    users.clear();
-    return false;
-  }
-
-  containsUser(String username, List<UserModel> users) {
-    for (var user in users) {
-      if (username == user.name) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  checkPassword(UserModel? user, String password) {
-    return user?.password == password ? true : false;
-  }
-
+  final controller = LoginController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,10 +72,24 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                               onPressed: () async {
-                                if (checkUser()) {
-                                  Navigator.of(context)
-                                      .pushNamed('/show_users');
-                                } else {}
+                                var response =
+                                    controller.checkUser(username, password);
+                                switch (response) {
+                                  case 1:
+                                    Navigator.of(context)
+                                        .pushNamed("/home_page");
+
+                                    break;
+                                  case 2:
+                                    const DialogError(
+                                        message: "Username not found");
+                                    break;
+                                  case 3:
+                                    const DialogError(
+                                        message: "Incorrect Password");
+                                    break;
+                                  default:
+                                }
                               },
                               child: const Text("Sign in")),
                         )),
@@ -106,7 +97,7 @@ class _LoginState extends State<Login> {
                         width: MediaQuery.of(context).size.height * 0.15,
                         child: ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/basic_form');
+                              Navigator.of(context).pushNamed('/register_page');
                             },
                             child: const Text("Sign up"))),
                   ],
