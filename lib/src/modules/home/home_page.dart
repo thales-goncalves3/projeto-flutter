@@ -61,7 +61,10 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed("/update_page",
+                                arguments: users[index]);
+                          },
                           icon: const Icon(Icons.update),
                           color: Colors.purple,
                         ),

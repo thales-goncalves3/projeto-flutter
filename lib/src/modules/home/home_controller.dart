@@ -1,4 +1,5 @@
 import 'package:basic_form/src/modules/database/database.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../core/models/user_model.dart';
 
@@ -10,7 +11,10 @@ class HomeController {
   }
 
   removeUser(int? user) {
-    print("entrou no removeUser");
     return database.removeUser(user);
+  }
+
+  updateUser(BuildContext context, UserModel? user) {
+    Navigator.of(context).pushNamed("update_page");
   }
 }
