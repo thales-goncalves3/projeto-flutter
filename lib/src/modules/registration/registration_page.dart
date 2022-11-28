@@ -162,27 +162,25 @@ class _BasicFormState extends State<BasicForm> {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            if (await controller.createUser(user, id.id)) {
-                              id.increment();
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        title: const Text(
-                                            "User created successfully"),
-                                        content: const Text("Back to sign in"),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pushNamed(
-                                                      context, "/"),
-                                              child: const Text("OK"))
-                                        ],
-                                      ));
-                            }
-                          }
+                          formKey.currentState!.save();
+                          await controller.createUser(user, id.id);
+                          id.increment();
+                          formKey.currentState?.reset();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    title: const Text(
+                                      "User created successfully",
+                                      style: TextStyle(color: Colors.purple),
+                                    ),
+                                    content: const Text("Back to sign in"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.pushNamed(context, "/"),
+                                          child: const Text("OK"))
+                                    ],
+                                  ));
                         },
                         child: const Text("Sign up"),
                       ),

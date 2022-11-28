@@ -4,10 +4,10 @@ import 'package:hive/hive.dart';
 var database = Hive.box("database");
 
 class Database {
-  List<UserModel> usersModels = <UserModel>[];
-  List<dynamic> listUsers = database.values.toList();
-
   List<UserModel> getAllUsers() {
+    List<dynamic> listUsers = database.values.toList();
+    List<UserModel> usersModels = <UserModel>[];
+
     for (var element in listUsers) {
       usersModels.add(UserModel.fromMap(element));
     }
@@ -29,5 +29,11 @@ class Database {
 
   Future<int> addUser(Map<String, dynamic> user) {
     return database.add(user);
+  }
+
+  void removeUser(int? id) async {
+    print(getAllUsers());
+    print(database.keys);
+    await database.delete(id);
   }
 }

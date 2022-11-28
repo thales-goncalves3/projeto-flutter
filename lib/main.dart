@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 void main() async {
   await Hive.initFlutter();
 
-  var database = await Hive.openBox('database');
+  await Hive.openBox('database');
 
   Hive.box('database').clear();
 

@@ -1,15 +1,24 @@
 import 'package:basic_form/src/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+import '../../core/models/user_model.dart';
+
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   var controller = HomeController();
+  late List<UserModel> users;
 
   @override
   Widget build(BuildContext context) {
-    var users = controller.getUsers();
-
+    setState(() {
+      users = controller.getUsers();
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("Users"),
@@ -19,7 +28,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: Icon(Icons.exit_to_app))
+              icon: const Icon(Icons.exit_to_app))
         ],
       ),
       body: ListView.builder(
@@ -57,7 +66,12 @@ class HomePage extends StatelessWidget {
                           color: Colors.purple,
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            int? id = users[index].id;
+                            setState(() {
+                              controller.removeUser(id);
+                            });
+                          },
                           icon: const Icon(Icons.delete_outline),
                           color: Colors.purple,
                         ),

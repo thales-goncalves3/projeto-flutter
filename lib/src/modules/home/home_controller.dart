@@ -8,4 +8,9 @@ class HomeController {
   List<UserModel> getUsers() {
     return database.getAllUsers();
   }
+
+  removeUser(int? user) {
+    print("entrou no removeUser");
+    return database.removeUser(user);
+  }
 }
