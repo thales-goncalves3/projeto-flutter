@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed("/");
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -36,51 +36,60 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.purple, width: 4),
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            child: Dismissible(
+              onDismissed: (direction) {
+                setState(() {
+                  controller.removeUser(users[index].id);
+                });
+              },
+              background: Container(color: Colors.purple),
+              key: ValueKey(users[index].id),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purple, width: 4),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("ID: ${users[index].id}"),
+                            Text("Nome: ${users[index].username}"),
+                            Text("Email: ${users[index].email}"),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text("ID: ${users[index].id}"),
-                          Text("Nome: ${users[index].username}"),
-                          Text("Email: ${users[index].email}"),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed("/update_page",
+                                  arguments: users[index]);
+                            },
+                            icon: const Icon(Icons.update),
+                            color: Colors.purple,
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              int? id = users[index].id;
+                              setState(() {
+                                controller.removeUser(id);
+                              });
+                            },
+                            icon: const Icon(Icons.delete_outline),
+                            color: Colors.purple,
+                          ),
                         ],
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed("/update_page",
-                                arguments: users[index]);
-                          },
-                          icon: const Icon(Icons.update),
-                          color: Colors.purple,
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            int? id = users[index].id;
-                            setState(() {
-                              controller.removeUser(id);
-                            });
-                          },
-                          icon: const Icon(Icons.delete_outline),
-                          color: Colors.purple,
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
