@@ -37,17 +37,63 @@ class _HomePageState extends State<HomePage> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
             child: Dismissible(
+              confirmDismiss: (DismissDirection direction) async {
+                return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          "Confirm",
+                          style: TextStyle(color: Colors.purple),
+                        ),
+                        content: const Text(
+                            "Are you sure you wish to delete this user"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  controller.removeUser(users[index].id);
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              child: const Text("DELETE")),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("CANCEL")),
+                        ],
+                      );
+                    });
+              },
               onDismissed: (direction) {
                 setState(() {
                   controller.removeUser(users[index].id);
                 });
               },
-              background: Container(color: Colors.purple),
+              background: Container(
+                alignment: const Alignment(0.8, 0.0),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(197, 255, 0, 0),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: const Icon(
+                  Icons.delete_outline,
+                  color: Colors.white,
+                ),
+              ),
               key: ValueKey(users[index].id),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.purple, width: 4),
                   borderRadius: BorderRadius.circular(3),
+                  color: Colors.purple,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.purple.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 5)),
+                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
@@ -59,9 +105,20 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("ID: ${users[index].id}"),
-                            Text("Nome: ${users[index].username}"),
-                            Text("Email: ${users[index].email}"),
+                            Text(
+                              "ID: ${users[index].id}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Nome: ${users[index].username}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              "Email: ${users[index].email}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
@@ -74,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                                   arguments: users[index]);
                             },
                             icon: const Icon(Icons.update),
-                            color: Colors.purple,
+                            color: const Color.fromARGB(255, 251, 251, 251),
                           ),
                           IconButton(
                             onPressed: () async {
@@ -84,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                               });
                             },
                             icon: const Icon(Icons.delete_outline),
-                            color: Colors.purple,
+                            color: const Color.fromARGB(255, 255, 255, 255),
                           ),
                         ],
                       ),
