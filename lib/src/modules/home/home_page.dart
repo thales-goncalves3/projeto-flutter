@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(color: Colors.purple),
                         ),
                         content: const Text(
-                            "Are you sure you wish to delete this user"),
+                            "Are you sure you wish to delete this user?"),
                         actions: [
                           TextButton(
                               onPressed: () {

@@ -1,5 +1,4 @@
 import 'package:basic_form/custom_input.dart';
-
 import 'package:flutter/material.dart';
 
 import '../../core/models/user_model.dart';
@@ -88,8 +87,9 @@ class _LoginState extends State<Login> {
                                           username, password);
                                       switch (response) {
                                         case 1:
-                                          Navigator.of(context)
-                                              .pushNamed("/home_page");
+                                          Navigator.of(context).pushNamed(
+                                              "/splash_page",
+                                              arguments: username.text);
                                           formKey.currentState?.reset();
                                           break;
                                         case 2:

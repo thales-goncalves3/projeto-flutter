@@ -1,5 +1,5 @@
 import 'package:basic_form/custom_input.dart';
-import 'package:basic_form/src/modules/update/update_controlle.r.dart';
+import 'package:basic_form/src/modules/update/update_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:string_validator/string_validator.dart' as validator;
 

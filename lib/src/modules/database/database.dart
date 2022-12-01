@@ -1,20 +1,18 @@
-import 'dart:math';
-
 import 'package:basic_form/src/core/models/user_model.dart';
 import 'package:hive/hive.dart';
 
-var database = Hive.box("database");
-
 class Database {
+  var database = Hive.box("database");
+
   List<UserModel> getAllUsers() {
     List<dynamic> listUsers = database.values.toList();
-    List<UserModel> usersModels = <UserModel>[];
+    List<UserModel> listUserModel = <UserModel>[];
 
     for (var element in listUsers) {
-      usersModels.add(UserModel.fromMap(element));
+      listUserModel.add(UserModel.fromMap(Map<String, dynamic>.from(element)));
     }
 
-    return usersModels;
+    return listUserModel;
   }
 
   UserModel? getUser(String username) {

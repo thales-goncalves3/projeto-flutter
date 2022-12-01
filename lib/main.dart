@@ -9,8 +9,6 @@ void main() async {
 
   await Hive.openBox('database');
 
-  Hive.box('database').clear();
-
   runApp(ChangeNotifierProvider(
     create: (context) => Id(),
     child: const AppWidget(),
