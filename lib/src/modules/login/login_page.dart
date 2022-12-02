@@ -1,6 +1,7 @@
 import 'package:basic_form/custom_input.dart';
 import 'package:basic_form/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/models/user_model.dart';

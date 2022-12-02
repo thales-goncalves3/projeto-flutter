@@ -1,8 +1,11 @@
 import 'package:basic_form/custom_input.dart';
 import 'package:basic_form/src/modules/database/tasks_database.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../core/models/task_model.dart';
+import '../../core/models/user_model.dart';
+import '../../providers/user_provider.dart';
 
 class CreateTask extends StatefulWidget {
   const CreateTask({super.key});
@@ -15,11 +18,10 @@ class _CreateTaskState extends State<CreateTask> {
   @override
   Widget build(BuildContext context) {
     var task = TaskModel();
-
-    var controller = TaskDatabase();
     TextEditingController title = TextEditingController();
     TextEditingController description = TextEditingController();
     final formKey = GlobalKey<FormState>();
+    UserModel user = UserProvider.user;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +55,8 @@ class _CreateTaskState extends State<CreateTask> {
                     ElevatedButton(
                         onPressed: (() {
                           formKey.currentState!.save();
+                          var box = Hive.box(user.username!);
+                          box.add(task.toMap());
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(

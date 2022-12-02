@@ -1,7 +1,7 @@
-import 'package:basic_form/src/modules/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
+import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
 import '../../providers/user_provider.dart';
 
@@ -13,11 +13,18 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-  var controller = Database();
   UserModel user = UserProvider.user;
+
   @override
   Widget build(BuildContext context) {
-    // UserModel user = UserProvider().user;
+    var box = Hive.box(user.username!);
+    var values = box.values;
+    List<TaskModel> tasks = <TaskModel>[];
+
+    for (var element in values) {
+      tasks.add(TaskModel.fromMap(Map<String, dynamic>.from(element)));
+    }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -37,6 +44,30 @@ class _TasksPageState extends State<TasksPage> {
               icon: const Icon(Icons.exit_to_app))
         ],
       ),
+      body: ListView.builder(
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(border: Border.all()),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tasks[index].title!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(tasks[index].description!),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
     );
   }
 }

@@ -161,6 +161,7 @@ class _BasicFormState extends State<BasicForm> {
                         onPressed: () async {
                           formKey.currentState!.save();
                           await controller.createUser(user);
+                          await Hive.openBox(user.username!);
                           formKey.currentState?.reset();
                           showDialog(
                               context: context,
