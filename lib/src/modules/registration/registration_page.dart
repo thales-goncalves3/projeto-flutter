@@ -3,8 +3,6 @@ import 'package:basic_form/src/modules/registration/registration_controller.dart
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:string_validator/string_validator.dart' as validator;
-import 'package:provider/provider.dart';
-import '../../../providers/id_provider.dart';
 
 import '../../../custom_input.dart';
 
@@ -22,13 +20,11 @@ class _BasicFormState extends State<BasicForm> {
   bool obscureTextPassword = true;
   bool obscureTextConfirmPassword = true;
   var user = UserModel();
-  late Id id;
+
   var controller = RegistrationController();
 
   @override
   Widget build(BuildContext context) {
-    id = Provider.of<Id>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sign up"),
@@ -164,9 +160,7 @@ class _BasicFormState extends State<BasicForm> {
                       child: ElevatedButton(
                         onPressed: () async {
                           formKey.currentState!.save();
-                          await controller.createUser(user, id.id);
-                          await Hive.openBox("user${id.id}".toString());
-                          id.increment();
+                          await controller.createUser(user);
                           formKey.currentState?.reset();
                           showDialog(
                               context: context,

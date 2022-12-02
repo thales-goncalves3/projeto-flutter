@@ -12,12 +12,8 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
-  late int id;
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      id = ModalRoute.of(context)!.settings.arguments as int;
-    });
     var task = TaskModel();
 
     var controller = TaskDatabase();
@@ -57,7 +53,6 @@ class _CreateTaskState extends State<CreateTask> {
                     ElevatedButton(
                         onPressed: (() {
                           formKey.currentState!.save();
-                          controller.createTask(id, task);
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(

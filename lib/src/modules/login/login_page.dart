@@ -1,5 +1,7 @@
 import 'package:basic_form/custom_input.dart';
+import 'package:basic_form/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/models/user_model.dart';
 import 'login_controller.dart';
@@ -16,11 +18,13 @@ class _LoginState extends State<Login> {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  var user = UserModel();
+  late UserProvider user;
 
   final controller = LoginController();
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -87,9 +91,11 @@ class _LoginState extends State<Login> {
                                           username, password);
                                       switch (response) {
                                         case 1:
-                                          Navigator.of(context).pushNamed(
-                                              "/splash_page",
-                                              arguments: username.text);
+                                          UserModel userToProvider =
+                                              controller.getUser(username.text);
+                                          user.setUser(userToProvider);
+                                          Navigator.of(context)
+                                              .pushNamed("/splash_page");
                                           formKey.currentState?.reset();
                                           break;
                                         case 2:

@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                           TextButton(
                               onPressed: () {
                                 setState(() {
-                                  controller.removeUser(users[index].id);
+                                  controller.removeUser(users[index]);
                                   Navigator.of(context).pop();
                                 });
                               },
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
               },
               onDismissed: (direction) {
                 setState(() {
-                  controller.removeUser(users[index].id);
+                  controller.removeUser(users[index]);
                 });
               },
               background: Container(
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                 ),
               ),
-              key: ValueKey(users[index].id),
+              key: ValueKey(users[index]),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
@@ -105,12 +105,6 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "ID: ${users[index].id}",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
                             Text(
                               "Nome: ${users[index].username}",
                               style: const TextStyle(color: Colors.white),
@@ -135,9 +129,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              int? id = users[index].id;
                               setState(() {
-                                controller.removeUser(id);
+                                controller.removeUser(users[index]);
                               });
                             },
                             icon: const Icon(Icons.delete_outline),

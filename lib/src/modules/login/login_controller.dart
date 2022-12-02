@@ -31,4 +31,17 @@ class LoginController {
   int checkPassword(UserModel? user, String password) {
     return user?.password == password ? 1 : 3;
   }
+
+  UserModel getUser(String username) {
+    List<UserModel> users = database.getAllUsers();
+    late UserModel getUser;
+
+    for (var user in users) {
+      if (username == user.username) {
+        getUser = user;
+      }
+    }
+
+    return getUser;
+  }
 }

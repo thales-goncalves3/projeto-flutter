@@ -10,7 +10,7 @@ class HomeController {
     return database.getAllUsers();
   }
 
-  removeUser(int? user) {
+  removeUser(UserModel user) {
     return database.removeUser(user);
   }
 

@@ -27,31 +27,19 @@ class Database {
     return null;
   }
 
-  UserModel? getUserWithId(int id) {
-    List<UserModel> listUsers = getAllUsers();
-
-    for (var user in listUsers) {
-      if (user.id == id) {
-        return user;
-      }
-    }
-
-    return null;
-  }
-
   Future<int> addUser(Map<String, dynamic> user) {
     return database.add(user);
   }
 
-  void removeUser(int? id) async {
-    await database.delete(id);
+  void removeUser(UserModel user) async {
+    await database.delete(user);
   }
 
-  void updateUser(int id, String? email, String? password) async {
-    UserModel? user = getUserWithId(id);
+  void updateUser(String? email, String? password) async {
+    var user = getUser(email!);
 
     if (user != null) {
-      if (email != null && email.isNotEmpty) {
+      if (email.isNotEmpty) {
         user = user.copyWith(email: email);
       }
 
@@ -59,7 +47,7 @@ class Database {
         user = user.copyWith(password: password);
       }
 
-      await database.put(id, user.toMap());
+      await database.put(user, user.toMap());
     }
   }
 }

@@ -95,7 +95,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   OutlinedButton(
                       onPressed: () {
                         if (controller.updateUser(
-                            data.id!, newEmail.text, newPassword.text)) {
+                            newEmail.text, newPassword.text)) {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(

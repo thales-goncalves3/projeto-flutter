@@ -4,9 +4,7 @@ import '../../core/models/user_model.dart';
 class RegistrationController {
   var database = Database();
 
-  Future<bool> createUser(UserModel user, id) async {
-    user = user.copyWith(id: id);
-
+  Future<bool> createUser(UserModel user) async {
     return await database.addUser(user.toMap()) >= 0 ? true : false;
   }
 
