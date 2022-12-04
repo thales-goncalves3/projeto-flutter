@@ -1,4 +1,5 @@
 import 'package:basic_form/src/core/models/user_model.dart';
+import 'package:basic_form/src/providers/id_provider.dart';
 import 'package:basic_form/src/providers/user_provider.dart';
 import 'package:basic_form/src/app_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => IdProvider()),
     ],
     child: const AppWidget(),
   ));

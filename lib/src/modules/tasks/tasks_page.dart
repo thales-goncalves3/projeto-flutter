@@ -1,3 +1,4 @@
+import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -14,16 +15,14 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   UserModel user = UserProvider.user;
+  late List<TaskModel> tasks;
+  TasksController controller = TasksController();
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box(user.username!);
-    var values = box.values;
-    List<TaskModel> tasks = <TaskModel>[];
-
-    for (var element in values) {
-      tasks.add(TaskModel.fromMap(Map<String, dynamic>.from(element)));
-    }
+    setState(() {
+      tasks = controller.getAllTasks();
+    });
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -41,27 +40,74 @@ class _TasksPageState extends State<TasksPage> {
               onPressed: () {
                 Navigator.of(context).pushNamed('/');
               },
-              icon: const Icon(Icons.exit_to_app))
+              icon: const Icon(Icons.exit_to_app)),
         ],
       ),
       body: ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (context, index) {
+            Color? color;
+
+            tasks[index].importance == "No urgency"
+                // ignore: prefer_const_constructors
+                ? color = Color.fromARGB(181, 9, 104, 12)
+                : tasks[index].importance == "For tomorrow"
+                    // ignore: prefer_const_constructors
+                    ? color = Color.fromARGB(197, 239, 216, 6)
+                    : color = const Color.fromARGB(181, 218, 24, 10);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                decoration: BoxDecoration(border: Border.all()),
+                decoration: BoxDecoration(color: color, boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.shade600,
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      blurStyle: BlurStyle.outer)
+                ]),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        tasks[index].title!,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            tasks[index].title!,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            tasks[index].description!,
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            tasks[index].importance,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      Text(tasks[index].description!),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  "/update_task_page",
+                                  arguments: tasks[index]);
+                            },
+                            icon: const Icon(Icons.update),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  controller.deleteTask(tasks[index]);
+                                });
+                              },
+                              icon: const Icon(Icons.delete_outline)),
+                        ],
+                      )
                     ],
                   ),
                 ),

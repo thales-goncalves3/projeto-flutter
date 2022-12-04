@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/models/user_model.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
