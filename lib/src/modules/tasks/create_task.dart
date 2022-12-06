@@ -1,9 +1,9 @@
-import 'package:basic_form/custom_input.dart';
+import 'package:basic_form/src/modules/tasks/convert_date_controller.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:basic_form/src/providers/id_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../../../custom_input.dart';
 import '../../core/models/task_model.dart';
 
 class CreateTask extends StatefulWidget {
@@ -21,8 +21,16 @@ class _CreateTaskState extends State<CreateTask> {
   ];
 
   late IdProvider id;
-
+  late DateTime fromDate;
+  late DateTime toDate;
   String? dropdownValue;
+
+  @override
+  void initState() {
+    fromDate = DateTime.now();
+    toDate = DateTime.now().add(const Duration(hours: 1));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +100,58 @@ class _CreateTaskState extends State<CreateTask> {
               const SizedBox(
                 height: 10,
               ),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ListTile(
+                        title: Text(ConvertDate.toDate(fromDate)),
+                        trailing: const Icon(Icons.arrow_drop_down),
+                        onTap: () async {
+                          final date = await pickDateTime(fromDate, true, null);
+                          if (date == null) return;
+
+                          if (date.isAfter(fromDate)) {
+                            fromDate = DateTime(date.year, date.month, date.day,
+                                date.hour, date.minute);
+                          }
+
+                          setState(() {
+                            fromDate = date;
+                            toDate = date;
+                          });
+                        },
+                      )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ListTile(
+                        title: Text(ConvertDate.toDate(toDate)),
+                        trailing: const Icon(Icons.arrow_drop_down),
+                        onTap: () async {
+                          final date = await pickDateTime(toDate, true, null);
+                          if (date == null) return;
+
+                          if (date.isBefore(fromDate)) {
+                            fromDate = DateTime(date.year, date.month, date.day,
+                                date.hour, date.minute);
+                          }
+
+                          setState(() {
+                            toDate = date;
+                          });
+                        },
+                      )),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -101,6 +161,9 @@ class _CreateTaskState extends State<CreateTask> {
                         onPressed: (() {
                           if (formKey.currentState!.validate()) {
                             task = task.copyWith(importance: dropdownValue);
+                            task = task.copyWith(from: fromDate);
+                            task = task.copyWith(to: toDate);
+
                             formKey.currentState!.save();
                             controller.addTask(task);
                             id.increment();
@@ -122,7 +185,10 @@ class _CreateTaskState extends State<CreateTask> {
                                     ));
                           }
                         }),
-                        child: const Text("Create"))
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("Create"),
+                        ))
                   ],
                 ),
               )
@@ -131,5 +197,24 @@ class _CreateTaskState extends State<CreateTask> {
         ),
       ),
     );
+  }
+
+  pickDateTime(DateTime initialDate, bool pickDate, DateTime? firstDate) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: firstDate ?? DateTime(2015, 8),
+          lastDate: DateTime(2101));
+
+      if (date == null) {
+        return null;
+      }
+
+      final time =
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
+
+      return date.add(time);
+    }
   }
 }

@@ -7,20 +7,26 @@ import '../../providers/user_provider.dart';
 class TasksController {
   UserModel user = UserProvider.user;
 
-  void addTask(TaskModel task) {
+  void addTask(TaskModel task) async {
     var box = Hive.box(user.username!);
-    box.put(task.id, task.toMap());
+    await box.put(task.id, task.toMap());
   }
 
-  void deleteTask(TaskModel task) {
+  void deleteTask(TaskModel task) async {
     var box = Hive.box(user.username!);
-    box.delete(task.id);
+    await box.delete(task.id);
   }
 
-  void updateTask(TaskModel task, String title, String description) {
+  void updateTask(TaskModel task, String title, String description) async {
     var box = Hive.box(user.username!);
     task = task.copyWith(title: title, description: description);
-    box.put(task.id, task.toMap());
+    await box.put(task.id, task.toMap());
+  }
+
+  void updateStatus(TaskModel task, String value) async {
+    var box = Hive.box(user.username!);
+    task = task.copyWith(status: value);
+    await box.put(task.id, task.toMap());
   }
 
   List<TaskModel> getAllTasks() {

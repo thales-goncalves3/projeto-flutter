@@ -6,11 +6,18 @@ class TaskModel {
   String? title;
   String? description;
   String importance;
+  String status;
+  final DateTime? from;
+  final DateTime? to;
+
   TaskModel({
     required this.id,
     required this.title,
     required this.description,
     required this.importance,
+    this.status = "In progress",
+    this.from,
+    this.to,
   });
 
   TaskModel copyWith({
@@ -18,12 +25,18 @@ class TaskModel {
     String? title,
     String? description,
     String? importance,
+    String? status,
+    DateTime? from,
+    DateTime? to,
   }) {
     return TaskModel(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       importance: importance ?? this.importance,
+      status: status ?? this.status,
+      from: from ?? this.from,
+      to: to ?? this.to,
     );
   }
 
@@ -33,6 +46,9 @@ class TaskModel {
       'title': title,
       'description': description,
       'importance': importance,
+      'status': status,
+      'from': from?.millisecondsSinceEpoch,
+      'to': to?.millisecondsSinceEpoch,
     };
   }
 
@@ -43,6 +59,13 @@ class TaskModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       importance: map['importance'] as String,
+      status: map['status'] != null ? map['status'] as String : '',
+      from: map['from'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['from'] as int)
+          : null,
+      to: map['to'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['to'] as int)
+          : null,
     );
   }
 
@@ -53,7 +76,7 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, description: $description, importance: $importance)';
+    return 'TaskModel(id: $id, title: $title, description: $description, importance: $importance, status: $status, from: $from, to: $to)';
   }
 
   @override
@@ -63,7 +86,10 @@ class TaskModel {
     return other.id == id &&
         other.title == title &&
         other.description == description &&
-        other.importance == importance;
+        other.importance == importance &&
+        other.status == status &&
+        other.from == from &&
+        other.to == to;
   }
 
   @override
@@ -71,6 +97,9 @@ class TaskModel {
     return id.hashCode ^
         title.hashCode ^
         description.hashCode ^
-        importance.hashCode;
+        importance.hashCode ^
+        status.hashCode ^
+        from.hashCode ^
+        to.hashCode;
   }
 }
