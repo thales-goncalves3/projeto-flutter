@@ -1,10 +1,13 @@
+import 'package:basic_form/src/core/models/meeting_model.dart';
 import 'package:basic_form/src/modules/tasks/convert_date_controller.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
 import '../../providers/user_provider.dart';
+import 'meeting_data_source.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -25,6 +28,59 @@ class _TasksPageState extends State<TasksPage> {
     super.initState();
   }
 
+  void showAppointment() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text("Your Appointments"),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SfCalendar(
+                      headerHeight: 60,
+                      view: CalendarView.month,
+                      dataSource: MeetingDataSource(getMeetings(tasks)),
+                      monthViewSettings: const MonthViewSettings(
+                        showAgenda: true,
+                        agendaItemHeight: 50,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+  List<MeetingModel> getMeetings(List<TaskModel> tasks) {
+    List<MeetingModel> meetings = <MeetingModel>[];
+    Color? color;
+
+    for (var task in tasks) {
+      task.importance == "No urgency"
+          ? color = Colors.green
+          : task.importance == "For tomorrow"
+              ? color = Colors.yellow
+              : color = Colors.red;
+
+      meetings.add(MeetingModel(
+          eventName: task.title!,
+          from: DateTime(task.from!.year, task.from!.month, task.from!.day),
+          to: DateTime(task.to!.year, task.to!.month, task.to!.day),
+          background: color,
+          isAllDay: false));
+    }
+
+    return meetings;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +97,14 @@ class _TasksPageState extends State<TasksPage> {
         actions: [
           IconButton(
               onPressed: () {
+                showAppointment();
+              },
+              icon: const Icon(Icons.calendar_month_outlined)),
+          const SizedBox(
+            width: 5,
+          ),
+          IconButton(
+              onPressed: () {
                 Navigator.of(context).pushNamed('/');
               },
               icon: const Icon(Icons.exit_to_app)),
@@ -52,10 +116,10 @@ class _TasksPageState extends State<TasksPage> {
             Color? color;
 
             tasks[index].importance == "No urgency"
-                ? color = const Color.fromARGB(181, 9, 104, 12)
+                ? color = Colors.green
                 : tasks[index].importance == "For tomorrow"
-                    ? color = const Color.fromARGB(197, 239, 216, 6)
-                    : color = const Color.fromARGB(181, 218, 24, 10);
+                    ? color = Colors.yellow
+                    : color = Colors.red;
             return Padding(
               padding: const EdgeInsets.all(20),
               child: Dismissible(
@@ -66,17 +130,17 @@ class _TasksPageState extends State<TasksPage> {
                       boxShadow: [
                         BoxShadow(
                           color: color,
-                          spreadRadius: 5,
-                          blurRadius: 5,
+                          spreadRadius: 1,
+                          blurRadius: 1,
                         )
                       ],
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.grey.shade100.withOpacity(0.8),
+                          Colors.grey.shade100.withOpacity(0.4),
                           Colors.grey.shade200.withOpacity(0.4),
-                          Colors.grey.shade300.withOpacity(0.6),
+                          Colors.grey.shade300.withOpacity(0.4),
                           Colors.grey.shade400.withOpacity(0.4),
                         ],
                       )),
