@@ -83,6 +83,9 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      tasks = controller.getAllTasks();
+    });
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -110,132 +113,147 @@ class _TasksPageState extends State<TasksPage> {
               icon: const Icon(Icons.exit_to_app)),
         ],
       ),
-      body: ListView.builder(
-          itemCount: tasks.length,
-          itemBuilder: (context, index) {
-            Color? color;
+      body: tasks.isEmpty
+          ? Center(
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/no-tasks.png",
+                  width: 200,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ))
+          : ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                Color? color;
 
-            tasks[index].importance == "No urgency"
-                ? color = Colors.green
-                : tasks[index].importance == "For tomorrow"
-                    ? color = Colors.yellow
-                    : color = Colors.red;
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Dismissible(
-                key: ValueKey<TaskModel>(tasks[index]),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: color,
-                      boxShadow: [
-                        BoxShadow(
-                          color: color,
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                        )
-                      ],
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.grey.shade100.withOpacity(0.4),
-                          Colors.grey.shade200.withOpacity(0.4),
-                          Colors.grey.shade300.withOpacity(0.4),
-                          Colors.grey.shade400.withOpacity(0.4),
+                tasks[index].importance == "No urgency"
+                    ? color = Colors.green
+                    : tasks[index].importance == "For tomorrow"
+                        ? color = Colors.yellow
+                        : color = Colors.red;
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Dismissible(
+                    key: ValueKey<TaskModel>(tasks[index]),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: color,
+                        boxShadow: [
+                          BoxShadow(
+                            color: color,
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                          )
                         ],
-                      )),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tasks[index].title!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w900),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    tasks[index].title!,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                  const SizedBox(
+                                    height: 1,
+                                  ),
+                                  Text(
+                                    tasks[index].description!,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    tasks[index].importance,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    "Start: ${ConvertDate.toDate(tasks[index].from!)}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    "Finish: ${ConvertDate.toDate(tasks[index].to!)}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                tasks[index].description!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                tasks[index].importance,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                "Start: ${ConvertDate.toDate(tasks[index].from!)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                "Finish: ${ConvertDate.toDate(tasks[index].to!)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 300,
-                          child: DropdownButtonFormField(
-                            hint: const Text("State of task"),
-                            value: tasks[index].status,
-                            items: dropOptions
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e),
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                // tasks[index].status = val!;
-                                controller.updateStatus(tasks[index], val!);
-                              });
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      "/update_task_page",
-                                      arguments: tasks[index]);
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              child: DropdownButtonFormField(
+                                hint: const Text("State of task"),
+                                value: tasks[index].status,
+                                items: dropOptions
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    // tasks[index].status = val!;
+                                    controller.updateStatus(tasks[index], val!);
+                                  });
                                 },
-                                icon: const Icon(Icons.update),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  controller.deleteTask(tasks[index]);
-                                  Navigator.of(context)
-                                      .pushNamed('/tasks_page');
-                                },
-                                icon: const Icon(Icons.delete_outline),
+                            ),
+                            Expanded(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(
+                                          "/update_task_page",
+                                          arguments: tasks[index]);
+                                    },
+                                    icon: const Icon(Icons.update),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        controller.deleteTask(tasks[index]);
+                                      });
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Task deleted"),
+                                          backgroundColor: Colors.purple,
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.delete_outline),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )
-                      ],
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            );
-          }),
+                );
+              }),
     );
   }
 }

@@ -33,7 +33,19 @@ class _SplashPageState extends State<SplashPage> {
     //   Hive.box(element.username!).clear();
     // }
     return Container(
+      width: MediaQuery.of(context).size.width * 1,
+      height: MediaQuery.of(context).size.height * 1,
       decoration: const BoxDecoration(color: Colors.purple),
+      child: const Center(
+        child: SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                Color.fromARGB(255, 252, 252, 252)),
+          ),
+        ),
+      ),
     );
   }
 }

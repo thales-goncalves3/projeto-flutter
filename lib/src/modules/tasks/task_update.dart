@@ -39,6 +39,8 @@ class _TaskUpdateState extends State<TaskUpdate> {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Form(
               key: formKey,
