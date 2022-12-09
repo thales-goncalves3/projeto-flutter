@@ -54,40 +54,43 @@ class _LoginState extends State<Login> {
                             )),
                       ],
                     ),
-                    Column(
-                      children: [
-                        CustomInput(
-                          controller: username,
-                          label: "Username",
-                          hintText: "Type your username",
-                          icon: Icons.person,
-                          obscureText: false,
-                          validator: ((text) => text!.isEmpty
-                              ? "This field can't be empty"
-                              : null),
-                        ),
-                        const SizedBox(height: 10),
-                        CustomInput(
-                          controller: password,
-                          label: "Password",
-                          hintText: "Type your password",
-                          icon: Icons.lock,
-                          validator: ((text) => text!.isEmpty
-                              ? "This field can't be empty"
-                              : null),
-                          obscureText: obscureTextPassword,
-                          suffix: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                obscureTextPassword = !obscureTextPassword;
-                              });
-                            },
-                            icon: Icon(obscureTextPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          CustomInput(
+                            controller: username,
+                            label: "Username",
+                            hintText: "Type your username",
+                            icon: Icons.person,
+                            obscureText: false,
+                            validator: ((text) => text!.isEmpty
+                                ? "This field can't be empty"
+                                : null),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 10),
+                          CustomInput(
+                            controller: password,
+                            label: "Password",
+                            hintText: "Type your password",
+                            icon: Icons.lock,
+                            validator: ((text) => text!.isEmpty
+                                ? "This field can't be empty"
+                                : null),
+                            obscureText: obscureTextPassword,
+                            suffix: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  obscureTextPassword = !obscureTextPassword;
+                                });
+                              },
+                              icon: Icon(obscureTextPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

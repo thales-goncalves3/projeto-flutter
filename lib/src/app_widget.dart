@@ -28,9 +28,7 @@ class AppWidget extends StatelessWidget {
         '/splash_page': (context) => const SplashPage(),
         '/update_task_page': (context) => const TaskUpdate(),
       },
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
+      theme: ThemeData(primarySwatch: Colors.purple, fontFamily: 'Roboto'),
     );
   }
 }

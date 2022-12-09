@@ -1,11 +1,6 @@
 import 'package:basic_form/custom_input.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../../core/models/task_model.dart';
 
@@ -44,11 +39,12 @@ class _TaskUpdateState extends State<TaskUpdate> {
         children: [
           Form(
               key: formKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomInput(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    CustomInput(
+                      icon: Icons.title,
                       controller: newTitle,
                       label: "Title: ${task.title}",
                       validator: (text) {
@@ -59,10 +55,11 @@ class _TaskUpdateState extends State<TaskUpdate> {
                         return null;
                       },
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomInput(
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomInput(
+                      icon: Icons.description_sharp,
                       controller: newDescription,
                       label: "Description: ${task.description}",
                       validator: (text) {
@@ -73,21 +70,33 @@ class _TaskUpdateState extends State<TaskUpdate> {
                         return null;
                       },
                     ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState!.save();
-                          controller.updateTask(
-                              task, newTitle.text, newDescription.text);
-                          Navigator.of(context).pushNamed("/tasks_page");
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Update"),
-                      ))
-                ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.12,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save();
+                              controller.updateTask(
+                                  task, newTitle.text, newDescription.text);
+                              Navigator.of(context).pushNamed("/tasks_page");
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text("Update"),
+                                Icon(Icons.update)
+                              ],
+                            ),
+                          )),
+                    )
+                  ],
+                ),
               ))
         ],
       ),

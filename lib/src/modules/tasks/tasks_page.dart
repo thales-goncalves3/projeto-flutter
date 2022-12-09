@@ -141,7 +141,36 @@ class _TasksPageState extends State<TasksPage> {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: Dismissible(
-                    key: ValueKey<TaskModel>(tasks[index]),
+                    background: Container(
+                      color: Colors.purple,
+                    ),
+                    confirmDismiss: (direction) async {
+                      return await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Delete task"),
+                              content: const Text(
+                                  "Are you sure that you wish remove this task?"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        controller.deleteTask(tasks[index]);
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                    child: const Text("DELETE")),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("CANCEL")),
+                              ],
+                            );
+                          });
+                    },
+                    key: ValueKey<int>(tasks[index].id),
                     child: Container(
                       decoration: BoxDecoration(
                         color: color,
@@ -168,7 +197,8 @@ class _TasksPageState extends State<TasksPage> {
                                   Text(
                                     tasks[index].title!,
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w900),
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 20),
                                   ),
                                   const SizedBox(
                                     height: 1,
@@ -209,7 +239,6 @@ class _TasksPageState extends State<TasksPage> {
                                     .toList(),
                                 onChanged: (val) {
                                   setState(() {
-                                    // tasks[index].status = val!;
                                     controller.updateStatus(tasks[index], val!);
                                   });
                                 },
@@ -229,18 +258,48 @@ class _TasksPageState extends State<TasksPage> {
                                     icon: const Icon(Icons.update),
                                   ),
                                   IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        controller.deleteTask(tasks[index]);
-                                      });
-
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Task deleted"),
-                                          backgroundColor: Colors.purple,
-                                        ),
-                                      );
+                                    onPressed: () async {
+                                      return await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text("Delete task"),
+                                              content: const Text(
+                                                  "Are you sure that you wish remove this task?"),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        controller.deleteTask(
+                                                            tasks[index]);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      });
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          duration: Duration(
+                                                              seconds: 1),
+                                                          content: Text(
+                                                              "Task deleted"),
+                                                          backgroundColor:
+                                                              Colors.purple,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child:
+                                                        const Text("DELETE")),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child:
+                                                        const Text("CANCEL")),
+                                              ],
+                                            );
+                                          });
                                     },
                                     icon: const Icon(Icons.delete_outline),
                                   ),
