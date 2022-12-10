@@ -61,29 +61,65 @@ class _CreateTaskState extends State<CreateTask> {
                   padding: const EdgeInsets.all(1),
                   child: Row(
                     children: [
-                      const Text(
-                        "Importance of task",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      DropdownButton(
-                        onChanged: (String? value) {
-                          setState(() {
-                            dropdownValue = value!;
-                          });
-                        },
-                        hint: const Text("Importance of task"),
-                        value: dropdownValue,
-                        items: importance
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                      LayoutBuilder(builder: (BuildContext context, _) {
+                        if (MediaQuery.of(context).size.width > 400) {
+                          return Row(
+                            children: [
+                              const Text(
+                                "Importance of task",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              DropdownButton(
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                hint: const Text("Importance of task"),
+                                value: dropdownValue,
+                                items: importance.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           );
-                        }).toList(),
-                      ),
+                        } else {
+                          return Column(
+                            children: [
+                              const Text(
+                                "Importance of task",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              DropdownButton(
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                hint: const Text("Importance of task"),
+                                value: dropdownValue,
+                                items: importance.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          );
+                        }
+                      }),
                     ],
                   ),
                 ),

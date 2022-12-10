@@ -73,27 +73,29 @@ class _TaskUpdateState extends State<TaskUpdate> {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.12,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              formKey.currentState!.save();
-                              controller.updateTask(
-                                  task, newTitle.text, newDescription.text);
-                              Navigator.of(context).pushNamed("/tasks_page");
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text("Update"),
-                                Icon(Icons.update)
-                              ],
-                            ),
-                          )),
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
+                            controller.updateTask(
+                                task, newTitle.text, newDescription.text);
+                            Navigator.of(context).pushNamed("/tasks_page");
+                          }
+                        },
+                        child: SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text("Update"),
+                              Icon(Icons.update)
+                            ],
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
