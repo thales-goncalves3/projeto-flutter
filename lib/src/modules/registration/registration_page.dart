@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:string_validator/string_validator.dart' as validator;
 
-import '../../../custom_input.dart';
+import '../custom_widgets/custom_input.dart';
 
 class BasicForm extends StatefulWidget {
   const BasicForm({super.key});

@@ -1,4 +1,4 @@
-import 'package:basic_form/custom_input.dart';
+import 'package:basic_form/src/modules/custom_widgets/custom_input.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:flutter/material.dart';
 

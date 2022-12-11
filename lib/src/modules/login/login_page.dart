@@ -1,4 +1,5 @@
-import 'package:basic_form/custom_input.dart';
+import 'package:basic_form/src/modules/custom_widgets/custom_dialog.dart';
+import 'package:basic_form/src/modules/custom_widgets/custom_input.dart';
 import 'package:basic_form/src/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -114,43 +115,34 @@ class _LoginState extends State<Login> {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) =>
-                                            AlertDialog(
-                                              title: const Text(
-                                                "Username not found",
-                                                style: TextStyle(
+                                            CustomDialog(
+                                                title: "Username not found",
+                                                titleStyle: const TextStyle(
                                                     color: Colors.purple),
-                                              ),
-                                              content:
-                                                  const Text("Back to sign in"),
-                                              actions: [
-                                                TextButton(
+                                                contentText: "Back to sign in",
+                                                actions: <Widget>[
+                                                  TextButton(
                                                     onPressed: () =>
-                                                        Navigator.pushNamed(
-                                                            context, "/"),
-                                                    child: const Text(
-                                                      "OK",
-                                                      style: TextStyle(
-                                                          color: Colors.purple),
-                                                    ))
-                                              ],
-                                            ));
+                                                        Navigator.of(context)
+                                                            .pop(),
+                                                    child: const Text("OK"),
+                                                  )
+                                                ]));
                                     break;
                                   case 3:
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) =>
-                                            AlertDialog(
-                                              title: const Text(
-                                                  "Password incorrect",
-                                                  style: TextStyle(
-                                                      color: Colors.purple)),
-                                              content:
-                                                  const Text("Back to sign in"),
+                                            CustomDialog(
+                                              title: "Password incorrect",
+                                              titleStyle: const TextStyle(
+                                                  color: Colors.purple),
+                                              contentText: "Back to sign in",
                                               actions: [
                                                 TextButton(
                                                     onPressed: () =>
-                                                        Navigator.pushNamed(
-                                                            context, "/"),
+                                                        Navigator.of(context)
+                                                            .pop(),
                                                     child: const Text("OK"))
                                               ],
                                             ));

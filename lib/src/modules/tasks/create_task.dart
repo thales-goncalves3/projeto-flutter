@@ -3,7 +3,7 @@ import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:basic_form/src/providers/id_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../custom_input.dart';
+import '../custom_widgets/custom_input.dart';
 import '../../core/models/task_model.dart';
 
 class CreateTask extends StatefulWidget {
@@ -176,8 +176,8 @@ class _CreateTaskState extends State<CreateTask> {
                           title: Text(ConvertDate.toDate(fromDate)),
                           trailing: const Icon(Icons.arrow_drop_down),
                           onTap: () async {
-                            final date =
-                                await pickDateTime(fromDate, true, null);
+                            final date = await controller.pickDateTime(
+                                context, fromDate, true, null);
                             if (date == null) return;
 
                             if (date.isAfter(fromDate)) {
@@ -201,7 +201,8 @@ class _CreateTaskState extends State<CreateTask> {
                           title: Text(ConvertDate.toDate(toDate)),
                           trailing: const Icon(Icons.arrow_drop_down),
                           onTap: () async {
-                            final date = await pickDateTime(toDate, true, null);
+                            final date = await controller.pickDateTime(
+                                context, toDate, true, null);
                             if (date == null) return;
 
                             if (date.isBefore(fromDate)) {
@@ -266,24 +267,5 @@ class _CreateTaskState extends State<CreateTask> {
         ),
       ),
     );
-  }
-
-  pickDateTime(DateTime initialDate, bool pickDate, DateTime? firstDate) async {
-    if (pickDate) {
-      final date = await showDatePicker(
-          context: context,
-          initialDate: initialDate,
-          firstDate: firstDate ?? DateTime(2015, 8),
-          lastDate: DateTime(2101));
-
-      if (date == null) {
-        return null;
-      }
-
-      final time =
-          Duration(hours: initialDate.hour, minutes: initialDate.minute);
-
-      return date.add(time);
-    }
   }
 }

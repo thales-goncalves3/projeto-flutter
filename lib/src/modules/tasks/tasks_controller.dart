@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../core/models/task_model.dart';
@@ -40,5 +42,26 @@ class TasksController {
     }
 
     return tasks;
+  }
+
+  Future<DateTime?> pickDateTime(BuildContext context, DateTime initialDate,
+      bool pickDate, DateTime? firstDate) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: firstDate ?? DateTime(2015, 8),
+          lastDate: DateTime(2101));
+
+      if (date == null) {
+        return null;
+      }
+
+      final time =
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
+
+      return date.add(time);
+    }
+    return null;
   }
 }
