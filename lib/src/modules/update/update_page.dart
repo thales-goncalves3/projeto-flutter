@@ -6,7 +6,7 @@ import 'package:string_validator/string_validator.dart' as validator;
 import '../../core/models/user_model.dart';
 
 class UpdatePage extends StatefulWidget {
-  UpdatePage({super.key});
+  const UpdatePage({super.key});
 
   @override
   State<UpdatePage> createState() => _UpdatePageState();

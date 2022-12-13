@@ -66,11 +66,11 @@ class _CreateTaskState extends State<CreateTask> {
                           return Row(
                             children: [
                               const Text(
-                                "Importance of task",
+                                "Task priority",
                                 style: TextStyle(fontSize: 20),
                               ),
                               const SizedBox(
-                                width: 20,
+                                width: 10,
                               ),
                               DropdownButton(
                                 onChanged: (String? value) {
@@ -78,7 +78,7 @@ class _CreateTaskState extends State<CreateTask> {
                                     dropdownValue = value!;
                                   });
                                 },
-                                hint: const Text("Importance of task"),
+                                hint: const Text("Task priority"),
                                 value: dropdownValue,
                                 items: importance.map<DropdownMenuItem<String>>(
                                     (String value) {
@@ -94,7 +94,7 @@ class _CreateTaskState extends State<CreateTask> {
                           return Column(
                             children: [
                               const Text(
-                                "Importance of task",
+                                "Task priority",
                                 style: TextStyle(fontSize: 20),
                               ),
                               const SizedBox(
@@ -106,7 +106,7 @@ class _CreateTaskState extends State<CreateTask> {
                                     dropdownValue = value!;
                                   });
                                 },
-                                hint: const Text("Importance of task"),
+                                hint: const Text("Task priority"),
                                 value: dropdownValue,
                                 items: importance.map<DropdownMenuItem<String>>(
                                     (String value) {
@@ -162,7 +162,7 @@ class _CreateTaskState extends State<CreateTask> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Start date end finish date",
+                      "Start date and finish date",
                       style: TextStyle(fontSize: 15),
                     ),
                     const SizedBox(

@@ -1,7 +1,10 @@
+import 'package:basic_form/src/modules/tasks/meeting_data_source.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../core/models/meeting_model.dart';
 import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
 import '../../providers/user_provider.dart';
@@ -63,5 +66,52 @@ class TasksController {
       return date.add(time);
     }
     return null;
+  }
+
+  List<MeetingModel> getMeetings(List<TaskModel> tasks) {
+    List<MeetingModel> meetings = <MeetingModel>[];
+    Color? color;
+
+    for (var task in tasks) {
+      task.importance == "No urgency"
+          ? color = Colors.green
+          : task.importance == "For tomorrow"
+              ? color = const Color.fromARGB(255, 242, 220, 27)
+              : color = Colors.red;
+
+      meetings.add(MeetingModel(
+          eventName: task.title!,
+          from: DateTime(task.from!.year, task.from!.month, task.from!.day),
+          to: DateTime(task.to!.year, task.to!.month, task.to!.day),
+          background: color,
+          isAllDay: false));
+    }
+
+    return meetings;
+  }
+
+  void showAppointment(BuildContext context, List<TaskModel> tasks) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text("Your Appointments"),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 1,
+                  width: MediaQuery.of(context).size.width,
+                  child: SfCalendar(
+                    view: CalendarView.month,
+                    dataSource: MeetingDataSource(getMeetings(tasks)),
+                    monthViewSettings:
+                        const MonthViewSettings(showAgenda: true),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

@@ -1,13 +1,10 @@
-import 'package:basic_form/src/core/models/meeting_model.dart';
 import 'package:basic_form/src/modules/tasks/convert_date_controller.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
 import '../../providers/user_provider.dart';
-import 'meeting_data_source.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -26,53 +23,6 @@ class _TasksPageState extends State<TasksPage> {
   void initState() {
     tasks = controller.getAllTasks();
     super.initState();
-  }
-
-  void showAppointment() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: const Text("Your Appointments"),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  width: MediaQuery.of(context).size.width,
-                  child: SfCalendar(
-                    headerHeight: 60,
-                    view: CalendarView.schedule,
-                    dataSource: MeetingDataSource(getMeetings(tasks)),
-                    scheduleViewSettings: const ScheduleViewSettings(),
-                  ),
-                ),
-              )
-            ],
-          );
-        });
-  }
-
-  List<MeetingModel> getMeetings(List<TaskModel> tasks) {
-    List<MeetingModel> meetings = <MeetingModel>[];
-    Color? color;
-
-    for (var task in tasks) {
-      task.importance == "No urgency"
-          ? color = Colors.green
-          : task.importance == "For tomorrow"
-              ? color = const Color.fromARGB(255, 242, 220, 27)
-              : color = Colors.red;
-
-      meetings.add(MeetingModel(
-          eventName: task.title!,
-          from: DateTime(task.from!.year, task.from!.month, task.from!.day),
-          to: DateTime(task.to!.year, task.to!.month, task.to!.day),
-          background: color,
-          isAllDay: false));
-    }
-
-    return meetings;
   }
 
   @override
@@ -94,7 +44,7 @@ class _TasksPageState extends State<TasksPage> {
         actions: [
           IconButton(
               onPressed: () {
-                showAppointment();
+                controller.showAppointment(context, tasks);
               },
               icon: const Icon(Icons.calendar_month_outlined)),
           const SizedBox(
