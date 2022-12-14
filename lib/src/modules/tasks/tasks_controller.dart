@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../core/models/meeting_model.dart';
 import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
-import '../../providers/user_provider.dart';
+import '../../services/providers/user_provider.dart';
 
 class TasksController {
   UserModel user = UserProvider.user;
@@ -28,9 +28,15 @@ class TasksController {
     await box.put(task.id, task.toMap());
   }
 
-  void updateStatus(TaskModel task, String value) async {
+  // void updateStatus(TaskModel task, String value) async {
+  //   var box = Hive.box(user.username!);
+  //   task = task.copyWith(status: value);
+  //   await box.put(task.id, task.toMap());
+  // }
+
+  void updateCheckBox(TaskModel task, bool value) async {
     var box = Hive.box(user.username!);
-    task = task.copyWith(status: value);
+    task = task.copyWith(checked: value);
     await box.put(task.id, task.toMap());
   }
 

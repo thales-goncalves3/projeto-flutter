@@ -7,6 +7,7 @@ class TaskModel {
   String? description;
   String importance;
   String status;
+  bool checked;
   final DateTime? from;
   final DateTime? to;
 
@@ -16,6 +17,7 @@ class TaskModel {
     required this.description,
     required this.importance,
     this.status = "In progress",
+    required this.checked,
     this.from,
     this.to,
   });
@@ -26,6 +28,7 @@ class TaskModel {
     String? description,
     String? importance,
     String? status,
+    bool? checked,
     DateTime? from,
     DateTime? to,
   }) {
@@ -35,6 +38,7 @@ class TaskModel {
       description: description ?? this.description,
       importance: importance ?? this.importance,
       status: status ?? this.status,
+      checked: checked ?? this.checked,
       from: from ?? this.from,
       to: to ?? this.to,
     );
@@ -47,6 +51,7 @@ class TaskModel {
       'description': description,
       'importance': importance,
       'status': status,
+      'checked': checked,
       'from': from?.millisecondsSinceEpoch,
       'to': to?.millisecondsSinceEpoch,
     };
@@ -59,7 +64,8 @@ class TaskModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       importance: map['importance'] as String,
-      status: map['status'] != null ? map['status'] as String : '',
+      status: map['status'] as String,
+      checked: map['checked'] as bool,
       from: map['from'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['from'] as int)
           : null,
@@ -76,7 +82,7 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, description: $description, importance: $importance, status: $status, from: $from, to: $to)';
+    return 'TaskModel(id: $id, title: $title, description: $description, importance: $importance, status: $status, checked: $checked, from: $from, to: $to)';
   }
 
   @override
@@ -88,6 +94,7 @@ class TaskModel {
         other.description == description &&
         other.importance == importance &&
         other.status == status &&
+        other.checked == checked &&
         other.from == from &&
         other.to == to;
   }
@@ -99,6 +106,7 @@ class TaskModel {
         description.hashCode ^
         importance.hashCode ^
         status.hashCode ^
+        checked.hashCode ^
         from.hashCode ^
         to.hashCode;
   }

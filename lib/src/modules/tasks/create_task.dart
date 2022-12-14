@@ -1,6 +1,6 @@
 import 'package:basic_form/src/modules/tasks/convert_date_controller.dart';
 import 'package:basic_form/src/modules/tasks/tasks_controller.dart';
-import 'package:basic_form/src/providers/id_provider.dart';
+import 'package:basic_form/src/services/providers/id_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../custom_widgets/custom_input.dart';
@@ -40,7 +40,8 @@ class _CreateTaskState extends State<CreateTask> {
   @override
   Widget build(BuildContext context) {
     id = Provider.of<IdProvider>(context);
-    var task = TaskModel(id: id.id, title: "", description: "", importance: "");
+    var task = TaskModel(
+        id: id.id, title: "", description: "", importance: "", checked: false);
     final formKey = GlobalKey<FormState>();
     TasksController controller = TasksController();
 

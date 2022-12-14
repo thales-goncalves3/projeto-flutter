@@ -1,6 +1,6 @@
 import 'package:basic_form/src/modules/custom_widgets/custom_dialog.dart';
 import 'package:basic_form/src/modules/custom_widgets/custom_input.dart';
-import 'package:basic_form/src/providers/user_provider.dart';
+import 'package:basic_form/src/services/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
