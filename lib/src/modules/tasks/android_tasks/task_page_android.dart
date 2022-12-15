@@ -146,7 +146,8 @@ class _TaskPageAndroidState extends State<TaskPageAndroid> {
                                     const SnackBar(
                                       duration: Duration(seconds: 1),
                                       content: Text("Task deleted"),
-                                      backgroundColor: Colors.purple,
+                                      backgroundColor:
+                                          Color.fromRGBO(6, 12, 34, 1),
                                     ),
                                   );
                                 },

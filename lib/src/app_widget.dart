@@ -14,8 +14,8 @@ class AppWidget extends StatelessWidget {
       routes: Routes.list,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: const Color.fromRGBO(81, 16, 62, 1),
-            secondary: const Color.fromRGBO(81, 16, 62, 1)),
+            primary: const Color.fromRGBO(6, 12, 34, 1),
+            secondary: const Color.fromRGBO(6, 12, 34, 1)),
         fontFamily: 'Roboto',
       ),
     );

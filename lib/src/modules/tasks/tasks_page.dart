@@ -31,7 +31,7 @@ class _TasksPageState extends State<TasksPage> {
   final dropOptions = ["Finished", "Not finished", "In progress"];
   @override
   void initState() {
-    checkNotifications();
+    controller.checkNotifications(context);
     tasks = controller.getAllTasks();
     for (var i = 0; i < tasks.length; i++) {
       isExpandedList.add(false);
@@ -48,7 +48,7 @@ class _TasksPageState extends State<TasksPage> {
     });
 
     return Scaffold(
-        backgroundColor: const Color.fromRGBO(81, 16, 62, 1),
+        backgroundColor: const Color.fromRGBO(6, 12, 34, 1),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushNamed("/create_task");
@@ -64,7 +64,7 @@ class _TasksPageState extends State<TasksPage> {
             ),
             IconButton(
                 onPressed: () {
-                  controller.showAppointment(context, tasks);
+                  Navigator.of(context).pushNamed("/appointment_page");
                 },
                 icon: const Icon(Icons.calendar_month_outlined)),
             const SizedBox(
@@ -106,7 +106,7 @@ class _TasksPageState extends State<TasksPage> {
                   ) {
                     return ExpansionPanel(
                         canTapOnHeader: true,
-                        backgroundColor: chooseColor(task.value),
+                        backgroundColor: controller.chooseColor(task.value),
                         isExpanded: isExpandedList[task.key],
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return Padding(
@@ -148,34 +148,17 @@ class _TasksPageState extends State<TasksPage> {
                         body: TaskPageAndroid(
                           task: task.value,
                           dropOptions: dropOptions,
-                          removeTask: removeTask,
-                          chooseColor: chooseColor,
+                          removeTask: updateChild,
+                          chooseColor: controller.chooseColor,
                         ));
                   }).toList(),
                 ),
               ));
   }
 
-  void removeTask() {
+  void updateChild() {
     setState(() {
       tasks = controller.getAllTasks();
     });
-  }
-
-  void checkNotifications() async {
-    await Provider.of<NotificationService>(context, listen: false)
-        .checkForNotifications();
-  }
-
-  Color chooseColor(TaskModel task) {
-    if (task.checked) {
-      return const Color.fromRGBO(128, 128, 128, 1);
-    } else {
-      return task.importance == "No urgency"
-          ? const Color.fromRGBO(16, 81, 51, 1)
-          : task.importance == "For tomorrow"
-              ? const Color.fromRGBO(16, 63, 81, 1)
-              : const Color.fromRGBO(81, 16, 46, 1);
-    }
   }
 }

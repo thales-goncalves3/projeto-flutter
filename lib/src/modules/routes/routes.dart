@@ -1,6 +1,7 @@
 import 'package:basic_form/src/modules/tasks/tasks_page.dart';
 import 'package:flutter/material.dart';
 
+import '../appointment/appointment_page.dart';
 import '../home/home_page.dart';
 import '../login/login_page.dart';
 import '../registration/registration_page.dart';
@@ -20,6 +21,7 @@ class Routes {
     '/create_task': (context) => const CreateTask(),
     '/splash_page': (context) => const SplashPage(),
     '/update_task_page': (context) => const TaskUpdate(),
+    '/appointment_page': (context) => const AppointmentPage(),
   };
 
   static String inicial = '/';

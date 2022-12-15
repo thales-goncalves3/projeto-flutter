@@ -31,147 +31,142 @@ class _LoginState extends State<Login> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+      body: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-                key: formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(width: 100, 'assets/images/logo.png'),
-                        const Text("TODO APP",
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w900,
-                              color: Color.fromRGBO(156, 39, 176, 1),
-                            )),
-                      ],
+                    Image.asset(width: 100, 'assets/images/logo.png'),
+                    const Text("TODO APP",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900,
+                          color: Color.fromRGBO(6, 12, 34, 1),
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  children: [
+                    CustomInput(
+                      controller: username,
+                      label: "Username",
+                      hintText: "Type your username",
+                      icon: Icons.person,
+                      obscureText: false,
+                      validator: ((text) =>
+                          text!.isEmpty ? "This field can't be empty" : null),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          CustomInput(
-                            controller: username,
-                            label: "Username",
-                            hintText: "Type your username",
-                            icon: Icons.person,
-                            obscureText: false,
-                            validator: ((text) => text!.isEmpty
-                                ? "This field can't be empty"
-                                : null),
-                          ),
-                          const SizedBox(height: 10),
-                          CustomInput(
-                            controller: password,
-                            label: "Password",
-                            hintText: "Type your password",
-                            icon: Icons.lock,
-                            validator: ((text) => text!.isEmpty
-                                ? "This field can't be empty"
-                                : null),
-                            obscureText: obscureTextPassword,
-                            suffix: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  obscureTextPassword = !obscureTextPassword;
-                                });
-                              },
-                              icon: Icon(obscureTextPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 10),
+                    CustomInput(
+                      controller: password,
+                      label: "Password",
+                      hintText: "Type your password",
+                      icon: Icons.lock,
+                      validator: ((text) =>
+                          text!.isEmpty ? "This field can't be empty" : null),
+                      obscureText: obscureTextPassword,
+                      suffix: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscureTextPassword = !obscureTextPassword;
+                          });
+                        },
+                        icon: Icon(obscureTextPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                var response =
-                                    controller.checkUser(username, password);
-                                switch (response) {
-                                  case 1:
-                                    UserModel userToProvider =
-                                        controller.getUser(username.text);
-                                    user.setUser(userToProvider);
-                                    Navigator.of(context)
-                                        .pushNamed("/splash_page");
-                                    formKey.currentState?.reset();
-                                    break;
-                                  case 2:
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            CustomDialog(
-                                                title: "Username not found",
-                                                titleStyle: const TextStyle(
-                                                    color: Colors.purple),
-                                                contentText: "Back to sign in",
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    child: const Text("OK"),
-                                                  )
-                                                ]));
-                                    break;
-                                  case 3:
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            CustomDialog(
-                                              title: "Password incorrect",
-                                              titleStyle: const TextStyle(
-                                                  color: Colors.purple),
-                                              contentText: "Back to sign in",
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(context)
-                                                            .pop(),
-                                                    child: const Text("OK"))
-                                              ],
-                                            ));
-                                    break;
-                                }
-                              }
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Sign in"),
-                            )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('/register_page');
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Sign up"),
-                            )),
-                      ],
-                    ),
                   ],
-                )),
-          ),
-        ),
-      ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            var response =
+                                controller.checkUser(username, password);
+                            switch (response) {
+                              case 1:
+                                UserModel userToProvider =
+                                    controller.getUser(username.text);
+                                user.setUser(userToProvider);
+                                Navigator.of(context).pushNamed("/splash_page");
+                                formKey.currentState?.reset();
+                                break;
+                              case 2:
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CustomDialog(
+                                            title: "Username not found",
+                                            titleStyle: const TextStyle(
+                                                color: Colors.purple),
+                                            contentText: "Back to sign in",
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text("OK"),
+                                              )
+                                            ]));
+                                break;
+                              case 3:
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CustomDialog(
+                                          title: "Password incorrect",
+                                          titleStyle: const TextStyle(
+                                              color: Colors.purple),
+                                          contentText: "Back to sign in",
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text("OK"))
+                                          ],
+                                        ));
+                                break;
+                            }
+                          }
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text("Sign in"),
+                        )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/register_page');
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text("Sign up"),
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

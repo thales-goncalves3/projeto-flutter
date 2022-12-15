@@ -56,73 +56,36 @@ class _CreateTaskState extends State<CreateTask> {
             key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Row(
-                    children: [
-                      LayoutBuilder(builder: (BuildContext context, _) {
-                        if (MediaQuery.of(context).size.width > 400) {
-                          return Row(
-                            children: [
-                              const Text(
-                                "Task priority",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              DropdownButton(
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    dropdownValue = value!;
-                                  });
-                                },
-                                hint: const Text("Task priority"),
-                                value: dropdownValue,
-                                items: importance.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Column(
-                            children: [
-                              const Text(
-                                "Task priority",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              DropdownButton(
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    dropdownValue = value!;
-                                  });
-                                },
-                                hint: const Text("Task priority"),
-                                value: dropdownValue,
-                                items: importance.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          );
-                        }
-                      }),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Task priority",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    DropdownButton(
+                      underline: Container(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
+                      },
+                      hint: const Text("Task priority"),
+                      value: dropdownValue,
+                      items: importance
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
                 Column(
                   children: [
@@ -245,7 +208,6 @@ class _CreateTaskState extends State<CreateTask> {
                                 builder: (BuildContext context) => AlertDialog(
                                       title: const Text(
                                         "Task created successfully",
-                                        style: TextStyle(color: Colors.purple),
                                       ),
                                       content: const Text("Back to Tasks"),
                                       actions: [

@@ -2,11 +2,13 @@ import 'package:basic_form/src/modules/tasks/meeting_data_source.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../core/models/meeting_model.dart';
 import '../../core/models/task_model.dart';
 import '../../core/models/user_model.dart';
+import '../../services/notifications_services/notification_service.dart';
 import '../../services/providers/user_provider.dart';
 
 class TasksController {
@@ -14,6 +16,7 @@ class TasksController {
 
   void addTask(TaskModel task) async {
     var box = Hive.box(user.username!);
+
     await box.put(task.id, task.toMap());
   }
 
@@ -27,12 +30,6 @@ class TasksController {
     task = task.copyWith(title: title, description: description);
     await box.put(task.id, task.toMap());
   }
-
-  // void updateStatus(TaskModel task, String value) async {
-  //   var box = Hive.box(user.username!);
-  //   task = task.copyWith(status: value);
-  //   await box.put(task.id, task.toMap());
-  // }
 
   void updateCheckBox(TaskModel task, bool value) async {
     var box = Hive.box(user.username!);
@@ -79,11 +76,7 @@ class TasksController {
     Color? color;
 
     for (var task in tasks) {
-      task.importance == "No urgency"
-          ? color = Colors.green
-          : task.importance == "For tomorrow"
-              ? color = const Color.fromARGB(255, 242, 220, 27)
-              : color = Colors.red;
+      color = chooseColor(task);
 
       meetings.add(MeetingModel(
           eventName: task.title!,
@@ -96,28 +89,20 @@ class TasksController {
     return meetings;
   }
 
-  void showAppointment(BuildContext context, List<TaskModel> tasks) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: const Text("Your Appointments"),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width,
-                  child: SfCalendar(
-                    view: CalendarView.month,
-                    dataSource: MeetingDataSource(getMeetings(tasks)),
-                    monthViewSettings:
-                        const MonthViewSettings(showAgenda: true),
-                  ),
-                ),
-              )
-            ],
-          );
-        });
+  Color chooseColor(TaskModel task) {
+    if (task.checked) {
+      return const Color.fromRGBO(128, 128, 128, 1);
+    } else {
+      return task.importance == "No urgency"
+          ? const Color.fromRGBO(16, 81, 51, 1)
+          : task.importance == "For tomorrow"
+              ? const Color.fromRGBO(16, 63, 81, 1)
+              : const Color.fromRGBO(81, 16, 46, 1);
+    }
+  }
+
+  void checkNotifications(BuildContext context) async {
+    await Provider.of<NotificationService>(context, listen: false)
+        .checkForNotifications();
   }
 }

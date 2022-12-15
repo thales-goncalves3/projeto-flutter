@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
       height: MediaQuery.of(context).size.height * 1,
-      decoration: const BoxDecoration(color: Colors.purple),
+      decoration: const BoxDecoration(color: Color.fromRGBO(6, 12, 34, 1)),
       child: const Center(
         child: SizedBox(
           width: 100,
