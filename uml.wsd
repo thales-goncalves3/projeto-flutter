@@ -1,0 +1,406 @@
+@startuml
+set namespaceSeparator ::
+
+class "basic_form::src::app_widget.dart::AppWidget" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "basic_form::src::app_widget.dart::AppWidget"
+
+class "basic_form::src::core::models::custom_notification.dart::CustomNotification" {
+  +int id
+  +String title
+  +String body
+  +String? payload
+}
+
+class "basic_form::src::core::models::meeting_model.dart::MeetingModel" {
+  +String eventName
+  +DateTime from
+  +DateTime to
+  +Color background
+  +bool isAllDay
+}
+
+"basic_form::src::core::models::meeting_model.dart::MeetingModel" o-- "dart::ui::Color"
+
+class "basic_form::src::core::models::task_model.dart::TaskModel" {
+  +int id
+  +String? title
+  +String? description
+  +String importance
+  +String status
+  +bool checked
+  +DateTime? from
+  +DateTime? to
+  +int hashCode
+  +TaskModel copyWith()
+  +Map<String, dynamic> toMap()
+  +String toJson()
+  +String toString()
+  +bool ==()
+}
+
+class "basic_form::src::core::models::user_model.dart::UserModel" {
+  +String? username
+  +String? email
+  +String? password
+  +int hashCode
+  +UserModel copyWith()
+  +Map<String, dynamic> toMap()
+  +String toJson()
+  +String toString()
+  +bool ==()
+}
+
+class "basic_form::src::modules::appointment::appointment_page.dart::AppointmentPage" {
+  +State<AppointmentPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::appointment::appointment_page.dart::AppointmentPage"
+
+class "basic_form::src::modules::appointment::appointment_page.dart::_AppointmentPageState" {
+  +TasksController controller
+  +Widget build()
+}
+
+"basic_form::src::modules::appointment::appointment_page.dart::_AppointmentPageState" o-- "basic_form::src::modules::tasks::tasks_controller.dart::TasksController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::appointment::appointment_page.dart::_AppointmentPageState"
+
+class "basic_form::src::modules::custom_widgets::custom_dialog.dart::CustomDialog" {
+  +String? title
+  +TextStyle? titleStyle
+  +String? contentText
+  +List<Widget>? actions
+  +Widget build()
+}
+
+"basic_form::src::modules::custom_widgets::custom_dialog.dart::CustomDialog" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "basic_form::src::modules::custom_widgets::custom_dialog.dart::CustomDialog"
+
+class "basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" {
+  +String label
+  +String? hintText
+  +IconData? icon
+  +Widget? suffix
+  +TextEditingController? controller
+  +bool obscureText
+  +String? Function(String?)? validator
+  +void Function(String?)? onSaved
+  +void Function(String)? onChanged
+  +Widget build()
+}
+
+"basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" o-- "flutter::src::widgets::framework.dart::Widget"
+"basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" o-- "null::String Function(String)"
+"basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput" o-- "null::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "basic_form::src::modules::custom_widgets::custom_input.dart::CustomInput"
+
+class "basic_form::src::modules::database::database.dart::Database" {
+  +Box<dynamic> database
+  +List<UserModel> getAllUsers()
+  +UserModel? getUser()
+  +Future<int> addUser()
+  +void removeUser()
+  +void updateUser()
+}
+
+"basic_form::src::modules::database::database.dart::Database" o-- "hive::hive.dart::Box<dynamic>"
+
+class "basic_form::src::modules::database::tasks_database.dart::TaskDatabase" {
+  +void createTask()
+  +List<TaskModel> getAllTasks()
+}
+
+class "basic_form::src::modules::home::home_controller.dart::HomeController" {
+  +Database database
+  +List<UserModel> getUsers()
+  +dynamic removeUser()
+  +dynamic updateUser()
+}
+
+"basic_form::src::modules::home::home_controller.dart::HomeController" o-- "basic_form::src::modules::database::database.dart::Database"
+
+class "basic_form::src::modules::home::home_page.dart::HomePage" {
+  +State<HomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::home::home_page.dart::HomePage"
+
+class "basic_form::src::modules::home::home_page.dart::_HomePageState" {
+  +HomeController controller
+  +List<UserModel> users
+  +Widget build()
+}
+
+"basic_form::src::modules::home::home_page.dart::_HomePageState" o-- "basic_form::src::modules::home::home_controller.dart::HomeController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::home::home_page.dart::_HomePageState"
+
+class "basic_form::src::modules::login::login_controller.dart::LoginController" {
+  +Database database
+  +int checkUser()
+  +dynamic containsUser()
+  +int checkPassword()
+  +UserModel getUser()
+}
+
+"basic_form::src::modules::login::login_controller.dart::LoginController" o-- "basic_form::src::modules::database::database.dart::Database"
+
+class "basic_form::src::modules::login::login_page.dart::Login" {
+  +State<Login> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::login::login_page.dart::Login"
+
+class "basic_form::src::modules::login::login_page.dart::_LoginState" {
+  +bool obscureTextPassword
+  +TextEditingController username
+  +TextEditingController password
+  +GlobalKey<FormState> formKey
+  +UserProvider user
+  +LoginController controller
+  +Widget build()
+}
+
+"basic_form::src::modules::login::login_page.dart::_LoginState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"basic_form::src::modules::login::login_page.dart::_LoginState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"basic_form::src::modules::login::login_page.dart::_LoginState" o-- "basic_form::src::services::providers::user_provider.dart::UserProvider"
+"basic_form::src::modules::login::login_page.dart::_LoginState" o-- "basic_form::src::modules::login::login_controller.dart::LoginController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::login::login_page.dart::_LoginState"
+
+class "basic_form::src::modules::registration::registration_controller.dart::RegistrationController" {
+  +Database database
+  +Future<bool> createUser()
+  +bool verifyUser()
+  +bool verifyEmail()
+}
+
+"basic_form::src::modules::registration::registration_controller.dart::RegistrationController" o-- "basic_form::src::modules::database::database.dart::Database"
+
+class "basic_form::src::modules::registration::registration_page.dart::BasicForm" {
+  +State<BasicForm> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::registration::registration_page.dart::BasicForm"
+
+class "basic_form::src::modules::registration::registration_page.dart::_BasicFormState" {
+  +GlobalKey<FormState> formKey
+  +String password
+  +String passwordConfirm
+  +bool obscureTextPassword
+  +bool obscureTextConfirmPassword
+  +UserModel user
+  +RegistrationController controller
+  +Widget build()
+}
+
+"basic_form::src::modules::registration::registration_page.dart::_BasicFormState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"       
+"basic_form::src::modules::registration::registration_page.dart::_BasicFormState" o-- "basic_form::src::core::models::user_model.dart::UserModel"
+"basic_form::src::modules::registration::registration_page.dart::_BasicFormState" o-- "basic_form::src::modules::registration::registration_controller.dart::RegistrationController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::registration::registration_page.dart::_BasicFormState"
+
+class "basic_form::src::modules::routes::routes.dart::Routes" {
+  {static} +Map<String, Widget Function(BuildContext)> list
+  {static} +String inicial
+  {static} +GlobalKey<NavigatorState>? navigatorKey
+}
+
+"basic_form::src::modules::routes::routes.dart::Routes" o-- "flutter::src::widgets::framework.dart::GlobalKey<NavigatorState>"
+
+class "basic_form::src::modules::splash::splash_page.dart::SplashPage" {
+  +State<SplashPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::splash::splash_page.dart::SplashPage"
+
+class "basic_form::src::modules::splash::splash_page.dart::_SplashPageState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::splash::splash_page.dart::_SplashPageState"
+
+class "basic_form::src::modules::tasks::android_tasks::task_page_android.dart::TaskPageAndroid" {
+  +TaskModel task
+  +List<String> dropOptions
+  +dynamic removeTask
+  +dynamic chooseColor
+  +State<TaskPageAndroid> createState()
+}
+
+"basic_form::src::modules::tasks::android_tasks::task_page_android.dart::TaskPageAndroid" o-- "basic_form::src::core::models::task_model.dart::TaskModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::tasks::android_tasks::task_page_android.dart::TaskPageAndroid"    
+
+class "basic_form::src::modules::tasks::android_tasks::task_page_android.dart::_TaskPageAndroidState" {
+  +TasksController controller
+  +bool notify
+  +Widget build()
+}
+
+"basic_form::src::modules::tasks::android_tasks::task_page_android.dart::_TaskPageAndroidState" o-- "basic_form::src::modules::tasks::tasks_controller.dart::TasksController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::tasks::android_tasks::task_page_android.dart::_TaskPageAndroidState"       
+
+class "basic_form::src::modules::tasks::convert_date_controller.dart::ConvertDate" {
+  {static} +String toDate()
+}
+
+class "basic_form::src::modules::tasks::create_task.dart::CreateTask" {
+  +State<CreateTask> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::tasks::create_task.dart::CreateTask"
+
+class "basic_form::src::modules::tasks::create_task.dart::_CreateTaskState" {
+  +List<String> importance
+  +IdProvider id
+  +DateTime fromDate
+  +DateTime toDate
+  +String? dropdownValue
+  +TextEditingController? title
+  +TextEditingController? description
+  +void initState()
+  +Widget build()
+}
+
+"basic_form::src::modules::tasks::create_task.dart::_CreateTaskState" o-- "basic_form::src::services::providers::id_provider.dart::IdProvider"
+"basic_form::src::modules::tasks::create_task.dart::_CreateTaskState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::tasks::create_task.dart::_CreateTaskState"
+
+class "basic_form::src::modules::tasks::meeting_data_source.dart::MeetingDataSource" {
+  +DateTime getStartTime()
+  +DateTime getEndTime()
+  +String getSubject()
+  +Color getColor()
+  +bool isAllDay()
+  -MeetingModel _getMeetingData()
+}
+
+"syncfusion_flutter_calendar::src::calendar::appointment_engine::calendar_datasource.dart::CalendarDataSource" <|-- "basic_form::src::modules::tasks::meeting_data_source.dart::MeetingDataSource"
+
+class "basic_form::src::modules::tasks::tasks_controller.dart::TasksController" {
+  +UserModel user
+  +void addTask()
+  +void deleteTask()
+  +void updateTask()
+  +void updateCheckBox()
+  +List<TaskModel> getAllTasks()
+  +Future<DateTime?> pickDateTime()
+  +List<MeetingModel> getMeetings()
+  +Color chooseColor()
+  +void checkNotifications()
+}
+
+"basic_form::src::modules::tasks::tasks_controller.dart::TasksController" o-- "basic_form::src::core::models::user_model.dart::UserModel"
+
+class "basic_form::src::modules::tasks::tasks_page.dart::TasksPage" {
+  +State<TasksPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::tasks::tasks_page.dart::TasksPage"
+
+class "basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState" {
+  +UserModel user
+  +List<TaskModel> tasks
+  +TasksController controller
+  +bool notify
+  +NotificationService service
+  +List<bool> isExpandedList
+  +List<bool> isCheckedList
+  +Colors color
+  +List<String> dropOptions
+  +void initState()
+  +Widget build()
+  +void updateChild()
+}
+
+"basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState" o-- "basic_form::src::core::models::user_model.dart::UserModel"
+"basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState" o-- "basic_form::src::modules::tasks::tasks_controller.dart::TasksController"
+"basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState" o-- "basic_form::src::services::notifications_services::notification_service.dart::NotificationService"
+"basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState" o-- "flutter::src::material::colors.dart::Colors"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::tasks::tasks_page.dart::_TasksPageState"
+
+class "basic_form::src::modules::tasks::task_update.dart::TaskUpdate" {
+  +State<TaskUpdate> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::tasks::task_update.dart::TaskUpdate"
+
+class "basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState" {
+  +TextEditingController newTitle
+  +TextEditingController newDescription
+  +TaskModel task
+  +TasksController controller
+  +GlobalKey<FormState> formKey
+  +Widget build()
+}
+
+"basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState" o-- "basic_form::src::core::models::task_model.dart::TaskModel"
+"basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState" o-- "basic_form::src::modules::tasks::tasks_controller.dart::TasksController"       
+"basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::tasks::task_update.dart::_TaskUpdateState"
+
+class "basic_form::src::modules::update::update_controller.dart::UpdateController" {
+  +Database database
+  +bool checkEmail()
+  +bool updateUser()
+}
+
+"basic_form::src::modules::update::update_controller.dart::UpdateController" o-- "basic_form::src::modules::database::database.dart::Database"
+
+class "basic_form::src::modules::update::update_page.dart::UpdatePage" {
+  +State<UpdatePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "basic_form::src::modules::update::update_page.dart::UpdatePage"
+
+class "basic_form::src::modules::update::update_page.dart::_UpdatePageState" {
+  +TextEditingController newEmail
+  +TextEditingController newPassword
+  +UpdateController controller
+  +UserModel data
+  +Widget build()
+}
+
+"basic_form::src::modules::update::update_page.dart::_UpdatePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"basic_form::src::modules::update::update_page.dart::_UpdatePageState" o-- "basic_form::src::modules::update::update_controller.dart::UpdateController"   
+"basic_form::src::modules::update::update_page.dart::_UpdatePageState" o-- "basic_form::src::core::models::user_model.dart::UserModel"
+"flutter::src::widgets::framework.dart::State" <|-- "basic_form::src::modules::update::update_page.dart::_UpdatePageState"
+
+class "basic_form::src::services::notifications_services::notification_service.dart::NotificationService" {
+  +FlutterLocalNotificationsPlugin localNotificationsPlugin
+  +AndroidNotificationDetails androidDetails
+  -dynamic _setupAndroidDetails()
+  -dynamic _setupNotifications()
+  -Future<void> _setupTimezone()
+  -dynamic _initializeNotifications()
+  -void _onSelectNotification()
+  +dynamic showNotificationScheduled()
+  +dynamic showLocalNotification()
+  +dynamic checkForNotifications()
+}
+
+"basic_form::src::services::notifications_services::notification_service.dart::NotificationService" o-- "flutter_local_notifications::src::flutter_local_notifications_plugin.dart::FlutterLocalNotificationsPlugin"
+"basic_form::src::services::notifications_services::notification_service.dart::NotificationService" o-- "flutter_local_notifications::src::platform_specifics::android::notification_details.dart::AndroidNotificationDetails"
+
+class "basic_form::src::services::providers::id_provider.dart::IdProvider" {
+  {static} -int _id
+  +int id
+  +void increment()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "basic_form::src::services::providers::id_provider.dart::IdProvider"
+
+class "basic_form::src::services::providers::user_provider.dart::UserProvider" {
+  {static} -UserModel _user
+  {static} +UserModel user
+  +void setUser()
+}
+
+"basic_form::src::services::providers::user_provider.dart::UserProvider" o-- "basic_form::src::core::models::user_model.dart::UserModel"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "basic_form::src::services::providers::user_provider.dart::UserProvider"
+
+
+@enduml
